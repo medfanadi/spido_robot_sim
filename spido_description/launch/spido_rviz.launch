@@ -1,0 +1,20 @@
+<launch>
+  <param name="robot_description"
+    command="$(find xacro)/xacro.py'$(find spido_description)/urdf/SPIDO.urdf.xacro'" />
+
+  <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
+    <param name="rate" value="150"/>   
+  </node>  
+
+   <!-- Combine joint values -->
+
+   <!-- <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"
+    respawn="false" output="screen">
+    <param name="publish_frequency" value="150"/>
+    <remap from="/joint_states" to="/spido/joint_states" />
+  </node> -->
+ 
+  <!-- Show in Rviz  -->
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find spido_description)/launch/spido.rviz"/> 
+
+</launch>

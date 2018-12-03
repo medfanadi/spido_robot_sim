@@ -1,0 +1,289 @@
+#ifndef INTERFACE_H
+#define INTERFACE_H
+
+#pragma pack(push)
+#pragma pack(1)             // data alignment
+
+
+// UDP frame structure
+struct pure_request_t {
+  uint8_t  identifier;      // !={0x00, 0xFF}
+  uint8_t  action;
+  uint16_t target;
+  uint8_t  data[1024-4];
+};
+
+struct pure_responce_t {
+  uint8_t  identifier;
+  uint8_t  action;
+  uint16_t target;  //source
+  uint8_t  result;
+  uint8_t  data[1024-5];
+};
+
+struct pure_inbound_t {
+  uint8_t  identifier;    // =0xFF
+  uint16_t target;
+  uint8_t  data[1024-3];
+};
+
+struct pure_outbound_t {
+  uint8_t  identifier;    // =0xFF
+  uint16_t source;
+  uint32_t timestamp_lo;
+  uint32_t timestamp_hi;  // 8 bytes field : double ??
+  uint8_t  data[1024-11];
+};
+
+typedef union {
+  struct pure_responce_t responce;
+  struct pure_outbound_t notification;
+  uint8_t buffer[1024];
+} pure_recv_message_t;
+
+typedef union {
+  struct pure_request_t request;
+  struct pure_inbound_t  notification;
+  uint8_t buffer[1024];
+} pure_send_message_t;
+
+// pure action code
+
+enum pure_action_code_t {
+  pure_action_GET     = 0x00,
+  pure_action_QUERY   = 0x01,
+  pure_action_REPLACE = 0x02,
+  pure_action_UPDATE  = 0x03,
+  pure_action_INSERT  = 0x04,
+  pure_action_DELETE  = 0x05
+};
+
+
+// Directory structure
+
+typedef struct {
+  uint16_t type;
+  uint16_t instance;
+  char     name[256];
+} pure_service_entry_t;
+
+typedef struct {
+  uint8_t number;
+  pure_service_entry_t *list;
+} pure_services_t;
+
+
+// Notification structure
+
+typedef struct {
+  uint16_t instance;
+  uint8_t  mode;
+} pure_notification_entry_t;
+
+typedef struct {
+  uint8_t number;
+  pure_notification_entry_t *list;
+} pure_notifications_t;
+
+// Diagnostic
+typedef struct {
+  char     name[256];
+  uint32_t status;
+} pure_diagnostic_entry_t;
+
+typedef struct {
+  uint16_t instance;               // instance of diagnostic service
+  uint8_t number;                  // number of devices
+  pure_diagnostic_entry_t *list;   // list of diagnostic entries for each device
+} pure_diagnostics_t;
+
+
+// Car service
+
+struct pure_car_service_data_t {
+  float max_speed;
+  float min_speed;
+  float max_steering;
+  float min_steering;
+  float max_acceleration;
+  float min_acceleration;
+  float wheelbase;
+};
+
+struct pure_car_service_target_t {
+  uint8_t enable;   // 0:disable, 1:enable
+  float speed;
+  float steering_front;
+  float steering_rear;
+};
+
+
+
+// Drive service
+typedef struct {
+  uint8_t  type;           // 0 - Linear drive; 1 - Angular Drive
+  uint8_t  default_mode;   // 0 - Position; 1 - Velocity; 2 - Torque
+  float    position_max;
+  float    position_min;
+  float    velocity_max;
+  float    velocity_min;
+  float    acceleration_max;
+  float    torque_max;
+  float    torque_min;
+} pure_drive_properties_t;
+
+
+//ajouté par moi Mohamed
+typedef struct {
+  uint8_t number;
+  pure_drive_properties_t *list;
+} pure_drives_t;
+
+struct  pure_all_drives_control_t{
+  uint8_t  enable1;
+  uint8_t  mode1;
+  float    target1;
+uint8_t  enable2;
+  uint8_t  mode2;
+  float    target2;
+uint8_t  enable3;
+  uint8_t  mode3;
+  float    target3;
+uint8_t  enable4;
+  uint8_t  mode4;
+  float    target4;
+uint8_t  enable5;
+  uint8_t  mode5;
+  float    target5;
+uint8_t  enable6;
+  uint8_t  mode6;
+  float    target6;
+};
+
+
+typedef struct {
+  uint8_t  mode;
+  uint8_t  status;
+  float    target;
+  float    position;
+  float    velocity;
+  float    torque;
+} pure_drive_state_t;
+
+typedef struct {
+  uint8_t  enable;
+  uint8_t  mode;
+  float    target;
+} pure_drive_control_t;
+
+enum pure_drive_mode_t {
+  position,
+  velocity,
+  torque
+};
+
+enum pure_drive_type_t {
+  linear,
+  angular
+};
+
+// Laser service
+
+struct pure_laser_config_t {
+  float     x_pos;
+  float     y_pos;
+  float     heading;
+  uint32_t  nb_echos;
+};
+
+struct pure_laser_measure_t {
+  float angle;
+  float range;
+};
+
+#pragma pack(pop)
+
+
+// Function prototype
+
+int pure_connection_start(const char *ip, int port, void (*notification_cb)(int, float, void*));
+void pure_connection_stop();
+
+int pure_send_request(int service, enum pure_action_code_t action,
+		      void *tx_data, int tx_len,
+		      void *rx_data, int *rx_len);
+int pure_send_message(uint8_t* buffer, int len); //TODO added that quickly, have to check.
+/*
+// TODO
+int pure_request_read(int service, enum pure_action_code_t action,
+		       void *rx_data, int *rx_len);
+
+int pure_request_write(int service, enum pure_action_code_t action,
+		       void *tx_data, int tx_len);
+
+//int pure_send_notification(uint16_t service, void *buffer, int len);
+*/
+
+
+// Directory Service
+int  pure_directory_init();
+pure_services_t *pure_directory_list();
+void pure_directory_print();
+
+// Notification Service
+int  pure_notification_insert(uint16_t service, uint8_t mode);
+int  pure_notification_delete(uint16_t);
+int  pure_notifications_init();
+pure_notifications_t *pure_notifications_list();
+void pure_notifications_print();
+int  pure_notifications_clear_all();
+
+// Diagnostic Service
+int pure_diagnostic_init(int service_instance);
+int pure_diagnostic_refresh();
+pure_diagnostics_t *pure_diagnostics_list();
+void pure_diagnostic_print();
+
+
+// ===========================
+//     Application service
+// ===========================
+
+// drive service (type=0x4009)
+void pure_drive_get_properties(uint16_t instance); // could return many drive propoerties
+//void pure_drive_get_state(uint16t instance); //outbound
+void pure_drive_set_target(uint16_t instance, uint8_t mode, float value);
+
+
+// IO service (type=0x4001)
+typedef struct {
+  int32_t analog_in_nunber;
+  int32_t analog_out_number;
+  int32_t digital_in_number;
+  int32_t digital_out_number;
+} pure_oi_propertis_t;
+
+enum pure_io_type_t {
+  analog_in,
+  analog_out,
+  digital_in,
+  digital_out
+};
+
+
+// I/O service (type= 0x4001)
+void pure_io_get_properties(uint16_t instance); //GET
+int pure_io_get_description(uint16_t instance,
+			    enum pure_io_type_t type, int32_t index); // QUERY
+
+
+// Laser service
+
+// Car service (type = 0x4003)
+
+//private :
+//  int pure_recv_callback();
+//  void pure_recv_error();
+
+
+#endif

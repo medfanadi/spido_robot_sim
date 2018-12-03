@@ -1,0 +1,97 @@
+#include "ros/ros.h"
+#include "std_msgs/Float64.h"
+#include "spido_pure_interface/cmd_drive.h"
+
+#include <sstream>
+
+std_msgs::Float64 front_left_steering_cmd;
+std_msgs::Float64 front_right_steering_cmd;
+std_msgs::Float64 rear_left_steering_cmd;
+std_msgs::Float64 rear_right_steering_cmd;
+
+std_msgs::Float64 front_left_wheel_cmd;
+std_msgs::Float64 front_right_wheel_cmd;
+std_msgs::Float64 rear_left_wheel_cmd;
+std_msgs::Float64 rear_right_wheel_cmd;
+
+bool data_changed = false;
+
+float wheel_radius = 0.4;                               //wheel radius in meters
+             
+             //compute the correct speed factor to reach the target speed in m/s
+float speed_factor = 1/wheel_radius;
+
+void cmdCallback(const spido_pure_interface::cmd_drive::ConstPtr& msg)
+{
+  ROS_INFO("Received cmd_car: linear_speed: %f | steering_angle_front %f| steering_angle_rear %f",
+	   msg->linear_speed, msg->steering_angle_front, msg->steering_angle_rear);
+  
+  //assigning cmd values
+  front_left_steering_cmd.data = msg->steering_angle_front;
+  front_right_steering_cmd.data = msg->steering_angle_front;
+  rear_left_steering_cmd.data = msg->steering_angle_rear;
+  rear_right_steering_cmd.data = msg->steering_angle_rear;
+
+  
+  front_left_wheel_cmd.data = speed_factor*msg->linear_speed;
+  front_right_wheel_cmd.data = -speed_factor*msg->linear_speed;
+  rear_left_wheel_cmd.data = speed_factor*msg->linear_speed;
+  rear_right_wheel_cmd.data = -speed_factor*msg->linear_speed;
+  
+  data_changed = true;
+}
+
+int main(int argc, char **argv)
+{
+
+  ros::init(argc, argv, "spido_gazebo_driver_teleop");
+  ros::NodeHandle n;
+  
+  ros::Subscriber sub = n.subscribe("/cmd_drive", 1000, cmdCallback);
+  
+  ros::Publisher front_left_wheel_pub =
+        n.advertise<std_msgs::Float64>("/spido/front_left_wheel/command", 1000);
+  ros::Publisher front_right_wheel_pub = 
+       n.advertise<std_msgs::Float64>("/spido/front_right_wheel/command", 1000);
+  ros::Publisher rear_left_wheel_pub = 
+         n.advertise<std_msgs::Float64>("/spido/rear_left_wheel/command", 1000);
+  ros::Publisher rear_right_wheel_pub = 
+        n.advertise<std_msgs::Float64>("/spido/rear_right_wheel/command", 1000);
+  
+  ros::Publisher front_left_steering_pub = 
+     n.advertise<std_msgs::Float64>("/spido/front_left_steering/command", 1000);
+  ros::Publisher front_right_steering_pub = 
+    n.advertise<std_msgs::Float64>("/spido/front_right_steering/command", 1000);
+  ros::Publisher rear_left_steering_pub = 
+      n.advertise<std_msgs::Float64>("/spido/rear_left_steering/command", 1000);
+  ros::Publisher rear_right_steering_pub = 
+     n.advertise<std_msgs::Float64>("/spido/rear_right_steering/command", 1000);
+ 
+  ros::Rate loop_rate(100);
+
+  int i = 0;
+  float max = 1;
+  while (ros::ok())
+  {
+    if (data_changed)
+    {
+      front_left_wheel_pub.publish(front_left_wheel_cmd);
+      front_right_wheel_pub.publish(front_right_wheel_cmd);
+      rear_left_wheel_pub.publish(rear_left_wheel_cmd);
+      rear_right_wheel_pub.publish(rear_right_wheel_cmd);
+      
+      front_left_steering_pub.publish(front_left_steering_cmd);
+      front_right_steering_pub.publish(front_right_steering_cmd);
+      rear_left_steering_pub.publish(rear_left_steering_cmd);
+      rear_right_steering_pub.publish(rear_right_steering_cmd);
+      
+      data_changed = false;
+    }
+    ros::spinOnce();
+
+    loop_rate.sleep();
+  }
+
+
+  return 0;
+}

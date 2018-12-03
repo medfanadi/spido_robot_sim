@@ -1,0 +1,64 @@
+<?xml version="1.0" ?>
+<sdf version="1.5">
+  <world name="default">
+    <!-- A global light source -->
+    <include>
+      <uri>model://sun</uri>
+    </include>
+    <!-- A ground plane -->
+    <include>
+      <uri>model://ground_plane</uri>
+    </include>
+    <!-- A slope -->
+   <model name="box">
+      <static>true</static>
+
+      <pose>90 99 25.3 0.26 0.0 0</pose>
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>200 200 .1</size>
+            </box>
+          </geometry>
+        </collision>
+        <visual name="visual">
+<material>
+      <script>
+        <uri>file://media/materials/scripts/gazebo.material</uri>
+        <name>Gazebo/Grey</name>
+      </script>
+    </material>
+          <geometry>
+            <box>
+              <size>200 200  .1</size>
+            </box>
+          </geometry>
+        </visual>
+      </link>
+    </model>
+
+
+ <!--model name="box2">
+      <static>true</static>
+
+      <pose>60 10 0.2 -0.3 0.0 0</pose>
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>80 60 .1</size>
+            </box>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>80 60 .1</size>
+            </box>
+          </geometry>
+        </visual>
+      </link>
+    </model-->
+  </world>
+</sdf>

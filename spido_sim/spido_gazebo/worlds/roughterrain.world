@@ -1,0 +1,55 @@
+<?xml version="1.0" ?>
+<sdf version="1.5">
+  <world name="default">
+    <!-- A global light source -->
+    <include>
+      <uri>model://sun</uri>
+    </include>
+    <!-- DEM of moon surface -->
+    <include>
+      <!-- todo our "models" directory sholud have been added to gazebo models path by export tag in package.xml, but it doesn't work... instead you must do the following in the shell:
+	export GAZEBO_MODEL_PATH=$GAZEBO_MODEL_PATH:~/towr/src/gazebo/models
+	export GAZEBO_RESOURCE_PATH=$GAZEBO_RESOURCE_PATH:~/towr/src/gazebo/models
+	But replace ~/ros-indigo-ws/src with wherever the amr-ros-config directory is located.
+ -->
+      <uri>model://roughterrain_1000x1000</uri>
+    </include>
+    <!-- Own physics settings to speed up simulation -->
+
+<!--    <physics type='ode' default="true">
+      <max_step_size>0.001</max_step_size>
+      <real_time_factor>0.14</real_time_factor>
+      <real_time_update_rate>140</real_time_update_rate>
+      <gravity>0 0 -9.8</gravity>
+    </physics>-->
+
+
+<!--    <physics type='ode' default="true">
+      <max_step_size>0.001</max_step_size>
+      <real_time_factor>1</real_time_factor>
+      <real_time_update_rate>1000</real_time_update_rate>
+      <gravity>0 0 -9.8</gravity>
+    </physics>-->
+<!--
+  <gui>
+    <type>fltk</type>
+    <size>480 320</size>
+    <pos>0 0</pos>
+    <frames>
+      <row height="100%">
+        <camera width="100%">
+          <xyz>0.3 0 3</xyz>
+          <rpy>0 90 90</rpy>
+        </camera>
+      </row>
+    </frames>
+  </gui>
+-->
+    <gui fullscreen='0'>
+      <camera name='user_camera'>
+        <pose>7 -10.35 7.27  0 0.44 1.95</pose>
+        <view_controller>orbit</view_controller>
+      </camera>
+    </gui>
+  </world>
+</sdf>

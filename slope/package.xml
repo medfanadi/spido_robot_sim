@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<package>
+  <name>slope</name>
+  <version>0.0.0</version>
+  <description>The slope package</description>
+
+  <!-- inpired by Dave Coleman, gazebo_ros_demos package
+  http://gazebosim.org/w/index.php?title=Tutorials/1.9/Using_A_URDF_In_Gazebo-->
+
+  <maintainer email="thomas@solatges.fr">Thomas Solatges</maintainer>
+
+  <license>BSD</license>
+
+  <author email="thomas@solatges.fr">Thomas Solatges</author>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <export>
+  </export>
+</package>

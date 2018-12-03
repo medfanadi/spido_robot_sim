@@ -1,0 +1,86 @@
+<?xml version="1.0" ?>
+<sdf version="1.5">
+  <model name="roughterrain_1000x1000">
+    <static>true</static>
+    <link name="link">
+      <collision name="collision">
+
+        <geometry>
+          <heightmap>
+            <uri>model://roughterrain_1000x1000/materials/textures/roughterrain.png</uri>
+            <size>27 27 1.5</size>
+            <pos>0 0 -1.5</pos>
+          </heightmap>
+        </geometry>
+        <surface>
+          <friction>
+            <ode>
+              <mu>300</mu>
+              <mu2>150</mu2>
+            </ode>
+          </friction>
+<!--      <contact>
+            <ode>
+              <soft_cfm>1</soft_cfm>
+              <kp>100000</kp>
+              <kd>1</kd>
+              <max_vel>0.000001</max_vel>
+              <min_depth>0.02</min_depth>
+            </ode>
+          </contact>-->
+      </surface>
+      </collision>
+      <visual name="visual">
+        <cast_shadows>false</cast_shadows>
+        <geometry>
+          <heightmap>
+            <use_terrain_paging>false</use_terrain_paging>
+     <!--       <texture>
+              <diffuse>file://roughterrain_1000x1000/materials/textures/repeatpicture.jpg</diffuse>
+              <normal>file://media/materials/textures/flat_normal.png</normal>
+              <size>1</size>
+            </texture> -->
+              <texture>
+                <diffuse>file://media/materials/textures/granite.jpg</diffuse>
+                <normal>file://media/materials/textures/flat_normal.png</normal>
+                <size>4.5</size>
+              </texture>
+              <texture>
+                <diffuse>file://media/materials/textures/grass_diffusespecular.png</diffuse>
+                <normal>file://media/materials/textures/flat_normal.png</normal>
+                <size>4.5</size>
+              </texture>
+              <texture>
+                <diffuse>file://media/materials/textures/fungus_diffusespecular.png</diffuse>
+                <normal>file://media/materials/textures/flat_normal.png</normal>
+                <size>4.5</size>
+              </texture>
+            <blend>
+              <min_height>2</min_height>
+              <fade_dist>5</fade_dist>
+            </blend>
+            <blend>
+              <min_height>4</min_height>
+              <fade_dist>5</fade_dist>
+            </blend>
+            <uri>model://roughterrain_1000x1000/materials/textures/roughterrain.png</uri>
+            <size>27 27 1.5</size>
+            <pos>0 0 -1.5</pos>
+          </heightmap>
+        </geometry>
+
+<!--        <material>
+          <script>
+            <uri>file://media/materials/scripts/gazebo.material</uri>
+            <name>Gazebo/Grey</name>
+          </script>
+        </material>-->
+
+      </visual>
+    </link>
+
+  </model>
+</sdf>
+
+
+

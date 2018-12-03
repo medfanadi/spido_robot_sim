@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<robot
+  name="slope">
+  <link
+    name="slope">
+    <inertial>
+      <origin
+        xyz="30.62 -6.06938101382426E-16 2.8821"
+        rpy="0 0 0" />
+      <mass
+        value="18575000" />
+      <inertia
+        ixx="15548399405.3393"
+        ixy="-9.69870109401819E-08"
+        ixz="12794682.1006751"
+        iyy="1470538291.32314"
+        iyz="9.08893288334038E-07"
+        izz="16880507047.6922" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="-1.5707963267949 0 0" />
+      <geometry>
+        <mesh
+          filename="package://spido_description/meshes/slope.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="-1.5707963267949 0 0" />
+      <geometry>
+        <mesh
+          filename="package://spido_description/meshes/slope.STL" />
+      </geometry>
+    </collision>
+  </link>
+</robot>

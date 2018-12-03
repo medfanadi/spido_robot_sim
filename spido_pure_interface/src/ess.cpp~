@@ -1,0 +1,51 @@
+#include "ros/ros.h"
+#include "std_msgs/String.h"
+#include "std_msgs/Float32.h"
+#include "spido_pure_interface/cmd_car.h"
+
+
+#include <sstream>
+
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+#include <strings.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <sys/time.h>
+
+#include <unistd.h>
+#include <stdint.h>
+#include <pthread.h>
+#include <signal.h>
+
+//#include <cmath.h>
+#include <math.h>
+#include "interface.h"
+void process_notification(int service, float timestamp, void *data)
+{
+  printf("Notification callback from %i\n", service);
+}
+
+  
+int main(int argc, char **argv)
+{
+{
+  ros::init(argc, argv, "spido_pure_interface");
+  ros::NodeHandle n;
+  //TODO: subscibe and publish on the good topics with appropriate message type
+  //ros::Publisher cmd_car_feedback = //TODO: remove or implement this
+  //n.advertise<spido_pure_interface::cmd_car>("cmd_car_feedback", 1000);
+  ros::Subscriber sub = n.subscribe("cmd_car_safe", 1000, carCallback);
+  ros::Rate loop_rate(10); 		                //Loop rate for the main loop (Hz)
+  
+ uint16_t diagnostic_instance = 0;
+  pure_services_t *services;
+  
+pure_connection_start("192.168.1.2", 60000, process_notification);
+  /*  pure_directory_init();
+  pure_directory_print();
+  services = pure_directory_list();*/
+return 0;
+}

@@ -1,0 +1,113 @@
+<?xml version="1.0"?>
+<robot>
+
+  <!-- ros_control plugin -->
+  <gazebo>
+    <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+      <robotNamespace>/spido</robotNamespace>
+    </plugin>
+  </gazebo>
+
+  <gazebo reference="base_link">
+    <material>Gazebo/Wood</material>
+  </gazebo>
+
+
+
+<!-- odom sensor -->
+<gazebo>
+  <plugin name="ground_truth" filename="libgazebo_ros_p3d.so">
+    <frameName>map</frameName>
+    <bodyName>spido_body</bodyName>
+    <topicName>/odom</topicName>
+    <updateRate>200.0</updateRate>
+  </plugin>
+</gazebo>
+<!-- IMU 1 sensor -->
+<gazebo>
+<plugin name="imu_plugin" filename="libhector_gazebo_ros_imu.so">
+            <updateRate>20</updateRate>
+            <bodyName>base_link</bodyName>
+            <topicName>/IMU_F</topicName>
+            <serviceName>/imu1/calibrate</serviceName>
+            <accelOffset>0.0 0.0 0.0</accelOffset>
+            <accelDrift>0.0 0.0 0.0</accelDrift>
+            <accelDriftFrequency>0.0 0.0 0.0</accelDriftFrequency>
+            <accelGaussianNoise>0.0 0.0 0.0</accelGaussianNoise>
+            <rateOffset>0.0 0.0 0.0</rateOffset>
+            <rateDrift>0.0 0.0 0.0</rateDrift>
+            <rateDriftFrequency>0.0 0.0 0.0</rateDriftFrequency>
+            <rateGaussianNoise>0.0 0.0 0.0</rateGaussianNoise>
+            <headingOffset>0.0</headingOffset>
+            <headingDrift>0.0</headingDrift>
+            <headingDriftFrequency>0.0</headingDriftFrequency>
+            <headingGaussianNoise>0.0</headingGaussianNoise>
+            <rpyOffset>0.0 0.0 0.0</rpyOffset>
+            <xyzOffset>0.0 0.0 0.0</xyzOffset>
+            <gaussianNoise>0.0</gaussianNoise>
+        </plugin>
+</gazebo>
+
+<!-- IMU 2 sensor -->
+<gazebo>
+<plugin name="imu_plugin" filename="libhector_gazebo_ros_imu.so">
+            <updateRate>200</updateRate>
+            <bodyName>base_link</bodyName>
+            <topicName>/IMU_R</topicName>
+            <serviceName>/imu2/calibrate</serviceName>
+            <accelOffset>0.0 0.0 0.0</accelOffset>
+            <accelDrift>0.0 0.0 0.0</accelDrift>
+            <accelDriftFrequency>0.0 0.0 0.0</accelDriftFrequency>
+            <accelGaussianNoise>0.0 0.0 0.0</accelGaussianNoise>
+            <rateOffset>0.0 0.0 0.0</rateOffset>
+            <rateDrift>0.0 0.0 0.0</rateDrift>
+            <rateDriftFrequency>0.0 0.0 0.0</rateDriftFrequency>
+            <rateGaussianNoise>0.0 0.0 0.0</rateGaussianNoise>
+            <headingOffset>0.0</headingOffset>
+            <headingDrift>0.0</headingDrift>
+            <headingDriftFrequency>0.0</headingDriftFrequency>
+            <headingGaussianNoise>0.0</headingGaussianNoise>
+            <rpyOffset>0.0 0.0 0.0</rpyOffset>
+            <xyzOffset>-0.850 0.0 0.0</xyzOffset>
+            <gaussianNoise>0.0</gaussianNoise>
+        </plugin>
+</gazebo>
+<!-- GPS sensor -->
+<gazebo>
+   <plugin name="mon_gps" filename="libhector_gazebo_ros_gps.so">
+      <alwaysOn>1</alwaysOn>
+      <updateRate>200</updateRate>
+        <bodyName>spido_body</bodyName> <!-- must be the link of the gps device, not the base_link or base_footprint -->
+        <frameId>spido_body</frameId>
+        <topicName>/GPS/fix</topicName>
+        <!-- Robotnik position at Fuente del Jarro -->
+        <referenceLatitude>39.5080331</referenceLatitude>
+        <referenceLongitude>-0.4619816</referenceLongitude>
+        <!-- To set heading in ENU orientation (degrees) -->
+        <referenceHeading>90</referenceHeading>
+        <velocityTopicName>/mon_gps/fix_velocity</velocityTopicName>
+        <drift>0.0 0.0 0.0</drift>
+        <!--<drift>0.0001 0.0001 0.0001</drift>-->
+        <!--<drift>0.3 0.3 0.3</drift>-->
+        <gaussianNoise>0.0 0.0 0.0</gaussianNoise>
+        <!--<gaussianNoise>0.00001 0.00001 0.00001</gaussianNoise>-->
+        <velocityDrift>0.00000 0.00000 0.00000</velocityDrift>
+        <!--<velocityGaussianNoise>0.1 0.1 0.1</velocityGaussianNoise>-->
+        <velocityGaussianNoise>0.00000 0.00000 0.00000</velocityGaussianNoise>
+        <ignoreTfPrefix>1</ignoreTfPrefix>
+   </plugin>
+</gazebo>
+<!-- contact sensor -->
+  <gazebo reference="r_foot">
+    <!-- contact sensor -->
+    <sensor type="contact" name="r_foot_contact_sensor">
+      <update_rate>1000.0</update_rate>
+      <always_on>1</always_on>
+      <contact>
+        <collision>r_foot_collision</collision>
+        <topic>/r_foot_contact</topic>
+      </contact>
+    </sensor>
+  </gazebo>
+
+</robot>

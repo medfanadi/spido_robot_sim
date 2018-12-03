@@ -1,0 +1,53 @@
+<?xml version="1.0" ?>
+<sdf version="1.4">
+  <model name="roughterrain_1000x1000">
+    <static>true</static>
+    <link name="link">
+      <collision name="collision">
+        <surface>
+          <friction>
+            <ode>
+              <mu>0.2</mu>
+            </ode>
+          </friction>
+          <contact>
+            <ode>
+              <soft_cfm>1</soft_cfm>
+              <kp>100000</kp>
+              <kd>1</kd>
+              <max_vel>0.000001</max_vel>
+              <min_depth>0.02</min_depth>
+            </ode>
+          </contact>
+        </surface>
+        <geometry>
+          <heightmap>
+            <uri>model://roughterrain_1000x1000/materials/textures/roughterrain.png</uri>
+            <size>200 200 15</size>
+            <pos>0 0 -15</pos>
+          </heightmap>
+        </geometry>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <heightmap>
+            <texture>
+              <diffuse>file://roughterrain_1000x1000/materials/textures/repeatpicture.jpg</diffuse>
+              <!-- diffuse Bug in Gazebo 2? Can only reference textures in the global gazebo textures directory. replace with this if/when fixed: model://apollo15_landing_site_1000x1000/materials/textures/AS16-110-18026HR-512x512.jpg /diffuse -->
+              <normal>file://media/materials/textures/flat_normal.png</normal>
+              <size>2</size>
+            </texture>
+             <texture>
+                <diffuse>file://media/materials/textures/grass_diffusespecular.png</diffuse>
+                <normal>file://media/materials/textures/flat_normal.png</normal>
+                <size>4.5</size>
+              </texture>
+            <uri>model://roughterrain_1000x1000/materials/textures/roughterrain.png</uri>
+            <size>200 200 15</size>
+            <pos>0 0 -15</pos>
+          </heightmap>
+        </geometry>
+      </visual>
+    </link>
+  </model>
+</sdf>

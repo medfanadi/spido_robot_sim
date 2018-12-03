@@ -1,0 +1,44 @@
+spido:
+  # Publish all joint states -----------------------------------
+  joint_state_controller:
+    type: joint_state_controller/JointStateController
+    publish_rate: 150  
+  
+  # Position Controllers ---------------------------------------
+  #TODO try to link the two (left_right) joints using dependent_joints
+  front_left_steering:
+    type: effort_controllers/JointPositionController
+    joint: front_left_prismatic_to_front_left_revolute
+    pid: {p: 200000.0, i: 0.01, d: 10.0}
+  front_right_steering:
+    type: effort_controllers/JointPositionController
+    joint: front_right_prismatic_to_front_right_revolute
+    pid: {p: 200000.0, i: 0.01, d: 10.0}
+  rear_left_steering:
+    type: effort_controllers/JointPositionController
+    joint: rear_left_prismatic_to_rear_left_revolute
+    pid: {p: 200000.0, i: 0.01, d: 10.0}
+  rear_right_steering:
+    type: effort_controllers/JointPositionController
+    joint: rear_right_prismatic_to_rear_right_revolute
+    pid: {p: 200000.0, i: 0.01, d: 10.0}
+    
+    
+    #wheel motors: TODO: try torque controller instead--------
+  front_left_wheel:
+    type: effort_controllers/JointVelocityController
+    joint: front_left_revolute_to_front_left_wheel
+    pid: {p: 100000.0, i: 0.01, d: 10.0}
+  front_right_wheel:
+    type: effort_controllers/JointVelocityController
+    joint: front_right_revolute_to_front_right_wheel
+    pid: {p: 100000.0, i: 0.01, d: 10.0}
+  rear_left_wheel:
+    type: effort_controllers/JointVelocityController
+    joint: rear_left_revolute_to_rear_left_wheel
+    pid: {p: 100000.0, i: 0.01, d: 10.0}
+  rear_right_wheel:
+    type: effort_controllers/JointVelocityController
+    joint: rear_right_revolute_to_rear_right_wheel
+    pid: {p: 100000.0, i: 0.01, d: 10.0}
+    

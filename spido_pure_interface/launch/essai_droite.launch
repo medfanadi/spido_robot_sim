@@ -1,0 +1,7 @@
+ <launch>
+	
+	<include file="$(find spido_riding)/launch/spido_interpolate.launch"/>
+	
+	<node name="spido_pure_interface_drive_service" pkg="spido_pure_interface" type="spido_pure_interface_drive_service"/>
+</launch>
+		

@@ -1,0 +1,42 @@
+<launch>
+
+  <!-- these are the arguments you can pass this launch file, for example paused:=true -->
+  <arg name="paused" default="false"/>
+  <arg name="use_sim_time" default="true"/>
+  <arg name="gui" default="true"/>
+  <arg name="headless" default="false"/>
+  <arg name="debug" default="false"/>
+
+  <!-- We resume the logic in empty_world.launch, changing only the name of the world to be launched -->
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="world_name" value="$(find spido_gazebo)/worlds/spido_st_cyr.world"/>
+    <arg name="debug" value="$(arg debug)" />
+    <arg name="gui" value="$(arg gui)" />
+    <arg name="paused" value="$(arg paused)"/>
+    <arg name="use_sim_time" value="$(arg use_sim_time)"/>
+    <arg name="headless" value="$(arg headless)"/>
+  </include>
+
+  <!-- Load the URDF into the ROS Parameter Server -->
+  <param name="robot_description"
+	 command="$(find xacro)/xacro.py '$(find spido_description)/urdf/SPIDO.urdf.xacro'" />
+
+  <!-- Run a python script to the send a service call to gazebo_ros to spawn a URDF robot -->
+  <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen"
+	args="-urdf -model spido -param robot_description -z 1.5"/> <!-- -Y 1.57 -->
+
+  <!-- ros_control spido launch file -->
+  <include file="$(find spido_control)/launch/spido_control.launch" />
+  
+  <node name="spido_gazebo_teleop" pkg="spido_gazebo" type="spido_gazebo_driver_teleop">
+      <remap from="cmd_car" to="cmd_car_safe"/>
+  </node>
+  
+  <node name="world_transform_broadcaster" pkg="spido_gazebo" type="world_transform_broadcaster.py"/>
+  
+  <node name="hector_trajectory_server" pkg="hector_trajectory_server" type="hector_trajectory_server">
+    <param name="trajectory_publish_rate" value="4"/>
+    <param name="target_frame_name" value="world"/>
+  </node>
+  
+</launch>

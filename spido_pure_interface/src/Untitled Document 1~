@@ -1,0 +1,11 @@
+
+void drive_config;
+pure_send_request(0x0002, pure_action_GET,
+		    NULL, 0,(void *)&drive_config,&len);//drive service
+
+uint8_t buffer[1024];
+  int len;
+  int ret;
+
+  // Get list of drives
+  pure_send_request(0x0002, pure_action_GET, NULL, 0, buffer, &len);

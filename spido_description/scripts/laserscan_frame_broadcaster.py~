@@ -1,0 +1,45 @@
+#!/usr/bin/env python
+ 
+import roslib
+import rospy
+import tf
+import tf.msg
+import geometry_msgs.msg
+import gazebo_msgs.srv
+ 
+class FixedTFBroadcaster:
+ 
+  def __init__(self):
+    self.pub_tf = rospy.Publisher("/tf", tf.msg.tfMessage)
+    
+    rospy.loginfo("initializing static transform")
+    # publish transform from world to kitchen
+    t = geometry_msgs.msg.TransformStamped()
+    t.header.frame_id = "velodyne"
+    t.child_frame_id = "/laserscan"
+    t.transform.translation.x = 0.0
+    t.transform.translation.y = 0.0
+    t.transform.translation.z = 0.0
+ 
+    t.transform.rotation.x = 0.0
+    t.transform.rotation.y = 0.0
+    t.transform.rotation.z = 0.0
+    t.transform.rotation.w = 1.0
+   
+    r = rospy.Rate(150)
+
+   
+    while not rospy.is_shutdown():
+      t.header.stamp = rospy.Time.now()
+      tfm = tf.msg.tfMessage([t])
+      self.pub_tf.publish(tfm)
+      # sleep for 0.1s
+      r.sleep()
+ 
+if __name__ == '__main__':
+ 
+
+    rospy.init_node('laserscan_tf_broadcaster')
+    tfb = FixedTFBroadcaster()
+    rospy.spin()
+    rospy.loginfo("laserscan_tf_broadcaster died...")

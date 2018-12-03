@@ -1,0 +1,6 @@
+ 
+	
+	<include file="$(find spido_riding)/launch/spido_interpolate.launch"/>
+	
+	<include file="$(find spido_pure_interface)/launch/empty_world.launch"/>
+		
