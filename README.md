@@ -29,8 +29,7 @@ launch files and world files to start the models in gazebo
 <h2>spido_description</h2>
 
 <p>control the robot joints in all kinematic configurations, publishes odom topic and, if configured, 
-also tf odom to base_link. Usually takes as input joystick commands and generates as outputs references for the gazebo 
-controllers defined in summit_xl_control. 
+also tf odom to base_link. 
 
 When used as main controller of the simulated robot, this node also computes the odometry of the robot using the joint movements and a IMU and publish this odometry to /odom. The node has a flag in the yaml files that forces the publication or not of the odom->base_footprint frames, needed by the localization and mapping algorithms.
 </p>
