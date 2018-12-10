@@ -19,8 +19,7 @@ Packages for the simulation of the Spido
 <p>This package contains the launch and configuration files to spawn the joint controllers with the ROS controller_manager. 
 It allows to launch the joint controllers for the Spido(4WDS).
 
-The Summit XL simulation stack follows the gazebo_ros controller manager scheme described in
-http://gazebosim.org/wiki/Tutorials/1.9/ROS_Control_with_Gazebo</p>
+
 
 <h2>spido_gazebo</h2>
 
